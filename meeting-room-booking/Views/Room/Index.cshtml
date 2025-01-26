@@ -1,0 +1,76 @@
+﻿@using meeting_room_booking.ViewModels
+@model IEnumerable<RoomViewModel>
+
+@{
+    ViewData["Title"] = "Index";
+}
+<div class="container">
+    <div>
+        <a asp-action="Create" class="btn btn-outline-primary">Create a Room</a>
+    </div>
+    <h3 style="margin-left: 30rem; color:darkcyan"> List of Rooms</h3>
+</div>
+
+<table class="table table-hover table-responsive table-bordered">
+    <thead>
+        <tr>
+            <th>
+                Room Title
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Capacity)
+            </th>
+            <th>
+              Color
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Description)
+            </th>
+            <th>
+                Facilites
+            </th>
+            <th>
+                Room Photo
+            </th>
+            <th>
+                Actions
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var room in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => room.Title)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => room.Capacity)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => room.RoomColor)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => room.Description)
+                </td>
+                <td>
+                    @foreach (var facility in room.Facilities)
+                    {
+                        @facility @:&nbsp;
+                    }
+                </td>
+                <td>
+                    @foreach (var image in room.ImagePaths)
+                    {
+                        <img src="~/Images/@image" style="height: 100px; width: 100px; border:solid 1px; border-color: gray"  />
+                    }
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@room.Id" class="btn btn-outline-primary">Edit</a> 
+                    <a asp-action="Details" asp-route-id="@room.Id" class="btn btn-outline-info">Details</a>
+                    <a asp-action="Delete" asp-route-id="@room.Id" class="btn btn-outline-danger" style="margin-top: 1rem">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -1,0 +1,122 @@
+﻿@using meeting_room_booking.ViewModels
+@model UserViewModel
+<head>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css">
+</head>
+<div class="container">
+    <div class="row">
+        <div class="col-sm-4">
+            <form id="registerUserForm">
+                <h4 style="margin: 0 0 0 90px">Register a new User</h4>
+                <hr />
+                <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+                <div class="form-floating mb-3">
+                    <input asp-for="Name" class="form-control" aria-required="true" placeholder="Name" />
+                    <label asp-for="Name">Name</label>
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+                <div class="form-floating mb-3">
+                    <input asp-for="Pin" class="form-control" aria-required="true" placeholder="Employee Pin" />
+                    <label asp-for="Pin">Employee Pin</label>
+                    <span asp-validation-for="Pin" class="text-danger"></span>
+                </div>
+                <div class="form-floating mb-3">
+                    <input asp-for="Email" class="form-control" autocomplete="" aria-required="true" placeholder="Email Address" />
+                    <label asp-for="Email">Email Address</label>
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+                <div class="form-floating mb-3">
+                    <input asp-for="PhoneNumber" class="form-control" autocomplete="" aria-required="true" placeholder="Phone Number" />
+                    <label asp-for="PhoneNumber">Phone Number</label>
+                    <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                </div>
+                <div class="form-floating mb-3">
+                    <input asp-for="Department" class="form-control" autocomplete="" aria-required="true" placeholder="Department" />
+                    <label asp-for="Department">Department</label>
+                    <span asp-validation-for="Department" class="text-danger"></span>
+                </div>
+                <div class="form-floating mb-3">
+                    <input asp-for="Password" class="form-control" autocomplete="new-password" aria-required="true" placeholder="Password"/>
+                    <label asp-for="Password">Password</label>
+                    <span asp-validation-for="Password" class="text-danger"></span>
+                </div>
+                <button id="registerUserBtn" class="w-100 btn btn-lg btn-primary">Create User</button>
+            </form>
+            <div id="msg" style="margin: 20px 0 0 60px"></div>
+        </div>
+        <div class="col-sm-2">
+
+        </div>
+        <div class="col-sm-3">
+            <form id="uploadUserForm" enctype="multipart/form-data">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group">
+                    <h4 style="margin: 0 0 0 50px">Upload user data</h4>
+                    <hr />
+                    <input asp-for="CSVFile" class="form-control" />
+                    <span asp-validation-for="CSVFile" class="text-danger"></span>
+                </div>
+                <button id="uploadUserBtn" class="w-100 btn btn-lg btn-primary" style="margin: 10px 0 0 0"> Register User </button>
+            </form>
+            <div id="msg1" style="margin: 20px 0 0 60px"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $('#registerUserBtn').click(function (e) {
+            e.preventDefault();
+            const formData = $('#registerUserForm').serialize();
+            $.ajax({
+                type: "POST",
+                url: "/UserManagement/CreateUser",
+                data: formData,
+                success: function (response) {
+                    if (response.isSuccess === true) {
+                        $('#msg').html(response.message).fadeIn('slow').css('color', 'green');
+                        $('#msg').delay(8000).fadeOut('slow');
+                    } 
+                    else {
+                        $('#msg').html(response.message).fadeIn('slow').css('color', 'red');
+                        $('#msg').delay(8000).fadeOut('slow');
+                    }
+                },
+                error: function (xhr, status, error) {
+                    toastr.error(error, { timeOut: 3000 });
+                }
+            });
+            $('#registerUserForm').trigger('reset');
+        });
+    });
+
+    $(document).ready(function () {
+        $('#uploadUserBtn').click(function (e) {
+            e.preventDefault();
+            var formData = new FormData($('#uploadUserForm')[0]);
+            $.ajax({
+                type: "POST",
+                url: "/UserManagement/CreateUser",
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (response) {
+                    if (response.isSuccess === true) {
+                        $('#msg1').html(response.message).fadeIn('slow').css('color', 'green');
+                        $('#msg1').delay(5000).fadeOut('slow');
+                    }
+                    else {
+                        $('#msg1').html(response.message).fadeIn('slow').css('color', 'red');
+                        $('#msg1').delay(5000).fadeOut('slow');
+                    }
+                },
+                error: function (xhr, status, error) {
+                    toastr.error(error, { timeOut: 3000 });
+                }
+            });
+            $('#uploadUserForm').trigger('reset');
+        });
+    });
+</script>

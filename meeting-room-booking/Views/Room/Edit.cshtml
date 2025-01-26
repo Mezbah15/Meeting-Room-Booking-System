@@ -1,0 +1,83 @@
+﻿@using meeting_room_booking.ViewModels
+@model RoomViewModel
+
+<head>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+</head>
+
+@{
+    ViewData["Title"] = "Edit";
+}
+<div class="alert-danger">
+    @ViewBag.ErrorMessage
+</div>
+<a asp-action="Index" class="btn btn-outline-info">All Rooms</a>
+@{
+    if (ViewBag.ErrorMessage == null)
+    {
+        <h5 style="padding-top: 2rem">Edit Room</h5>
+        <hr />
+        <div class="row">
+            <div class="col-md-4">
+                <form asp-action="Edit" enctype="multipart/form-data">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <input type="hidden" asp-for="Id" />
+                    <div class="form-group" style="margin:0 0 10px 0">
+                        <label asp-for="Title" class="control-label"></label>
+                        <input asp-for="Title" class="form-control" />
+                        <span asp-validation-for="Title" class="text-danger"></span>
+                    </div>
+                    <span style="color: red">@ViewBag.Error</span>
+                    <div class="form-group" style="margin:0 0 10px 0">
+                        <label asp-for="Capacity" class="control-label"></label>
+                        <input asp-for="Capacity" class="form-control" />
+                        <span asp-validation-for="Capacity" class="text-danger"></span>
+                    </div>
+                    <div class="form-group" style="margin:0 0 10px 0">
+                        <label class="control-label">Room Color </label>
+                        <input asp-for="RoomColor" class="form-control" />
+                        <span asp-validation-for="RoomColor" class="text-danger"></span>
+                    </div>
+                    <div class="form-group" style="margin:0 0 10px 0">
+                        <label asp-for="Description" class="control-label"></label>
+                        <input asp-for="Description" class="form-control" />
+                        <span asp-validation-for="Description" class="text-danger"></span>
+                    </div>
+                    @foreach (var facility in Model.FacilitiesForRoom)
+                    {
+                        <div class="form-check" style="margin:0 0 10px 0">
+                            <input name="SelectedFacilities" @(facility.IsSelected ? "checked" : "") class="form-check-input" type="checkbox" value="@facility.Id" id="flexCheckDefault">
+                            <label class="form-check-label" for="flexCheckDefault">
+                                @facility.Name
+                            </label>
+                        </div>
+                    }
+                    <div class="form-group" style="margin:0 0 10px 0">
+                        @if (Model.ImagePaths != null)
+                        {
+                            @foreach (var image in Model.ImagePaths)
+                            {
+                                <img id="previewImage" class="form-group" src="~/Images/@image" style="height: 100px; width: 100px; border:solid 1px; border-color: gray" />
+                            }
+                        }
+                        <input asp-for="RoomImages" id="inputImage" style="margin: 5px 0 0 0" class="form-control" multiple />
+                        <span asp-validation-for="RoomImages" class="text-danger"></span>
+                    </div>
+                    <div>
+                        <p style="color:red">@TempData["ExtensionError"] </p>
+                        <p style="color:red">@TempData["SizeError"] </p>
+                    </div>
+                    <div class="form-group" style="margin:10px 0 10px 0">
+                        <input type="submit" value="Update" class="btn btn-outline-primary" />
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        @section Scripts {
+        @{
+                await Html.RenderPartialAsync("_ValidationScriptsPartial");
+            }
+        }
+    }
+}

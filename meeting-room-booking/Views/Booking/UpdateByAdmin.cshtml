@@ -1,0 +1,56 @@
+﻿@using meeting_room_booking.ViewModels
+@model BookingViewModel
+<head>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <link rel="stylesheet" href="~/jquery.datetimepicker.min.css" />
+    <script src="~/jquery.datetimepicker.full.min.js"></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+</head>
+
+<form asp-for="Edit" method="post">
+    <div class="mb-3">
+        <label class="form-label">Select Room</label>
+        <select class="form-select" id="selectedRoom" name="resourceId">
+            <option value="">-- Select a Room --</option>
+            @foreach (var room in ViewBag.Rooms)
+            {
+                if (room.Id == Model.resourceId)
+                {
+                    <option selected value="@room.Id">
+                        @room.Title (@string.Join(',', room.Capacity)) (@string.Join(',', room.Facilities))
+                    </option>
+                }
+                else
+                {
+                    <option value="@room.Id">
+                        @room.Title (@string.Join(',', room.Capacity)) (@string.Join(',', room.Facilities))
+                    </option>
+                }
+            }
+        </select>
+    </div>
+    <div class="mb-3">
+        <label for="event" class="form-label">Meeting Title</label>
+        <input asp-for="title" type="text" class="form-control" id="eventTitle">
+        <div class="form-text">Keep Meeting title as same as for convenience.</div>
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Start at</label>
+        <input class="form-control dateTime" name="start" value="@Model.start.ToString("yyyy-MM-ddTHH:mm:ss")">
+    </div>
+    <div class="mb-3">
+        <label class="form-label">End at</label>
+        <input class="form-control dateTime" name="end" value="@Model.end.ToString("yyyy-MM-ddTHH:mm:ss")">
+    </div>
+    <div class="form-group">
+        <input type="submit" value="Update" class="btn btn-outline-primary" />
+    </div>
+</form>
+<script>
+    $('.dateTime').datetimepicker({
+        format: 'Y-m-d H:i',
+        step: 30
+    });
+</script>

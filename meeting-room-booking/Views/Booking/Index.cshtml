@@ -1,0 +1,372 @@
+﻿@using System.Security.Claims
+@using meeting_room_booking.ViewModels
+@model IEnumerable<RoomViewModel>
+@{
+    ViewData["Title"] = "Book a Meeting";
+}
+<head>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@@event-calendar/build@3.7.1/event-calendar.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@@event-calendar/build@3.7.1/event-calendar.min.js"></script>
+
+    <link rel="stylesheet" href="~/jquery.datetimepicker.min.css" />
+    <script src="~/jquery.datetimepicker.full.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css">
+    <link href="~/css/custommodal.css" rel="stylesheet" />
+</head>
+
+<body>
+    <h3 style="text-align:center">Book a Meeting Today!</h3>
+    <btn class="btn btn-outline-primary" data-bs-target="#eventModal" data-bs-toggle="modal">Reserve your Room</btn>
+    <hr />
+    <main class="row">
+        <div id="ec" class="col"></div>
+    </main>
+    <section>
+        <div class="modal fade" id="eventModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Book a Meeting</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form asp-for="Create" method="post" id="modal-form">
+                            <div class="mb-3">
+                                <label class="form-label">Select Room</label>
+                                <select class="form-select" id="selectedRoom">
+                                    <option value="">-- Select a Room --</option>
+                                    @foreach (var room in Model)
+                                    {
+                                        <option value="@room.Id">
+                                            @room.Title (@string.Join(',', room.Capacity))                                            (@string.Join(',', room.Facilities))
+                                        </option>
+                                    }
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="event" class="form-label">Meeting Title</label>
+                                <input type="text" class="form-control" id="eventTitle">
+                                <div id="emailHelp" class="form-text">Anyone can see your Meeting Booking.</div>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Start at</label>
+                                <input class="form-control dateTimePicker" id="startTime" name="startTime">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">End at</label>
+                                <input class="form-control dateTimePicker" id="endTime" name="endTime">
+                            </div>
+                            <script>
+                                $('.dateTimePicker').datetimepicker({
+                                    format: 'Y-m-d H:i',
+                                    step: 30
+                                });
+                            </script>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
+                        <button id="createEventBySelect" class="btn btn-outline-primary">Submit</button>
+                        <button id="createEventByDateClick" class="btn btn-outline-primary" style="display: none">
+                            Submit
+                        </button>
+                        <button id="updateEventButton" class="btn btn-outline-info" style="display: none">Update</button>
+                        <button id="deleteEventButton" class="btn btn-outline-danger" style="display: none">Delete</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section>
+        <div class="overlay">
+            <div id="DeleteConfirmModal">
+                <div class="custom-modal-content">
+                    <div class="custom-container">
+                        <h1 style="color: darkred">Delete Booking</h1>
+                        <p style="color:red">Are you sure want to delete this booking?</p>
+                    <div class="clearfix">
+                        <button class="btn btn-outline-secondary" id="modal-close-btn">Close</button>
+                        <button id="DeleteConfirmBtn" class="btn btn-outline-danger">Delete</button>
+                    </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</body>
+
+<script>
+    $(document).ready(function () {
+        var modal = new bootstrap.Modal($('#eventModal'));
+        var rooms = @Html.Raw(Json.Serialize(Model));
+        var bookings = @Html.Raw(Json.Serialize(ViewBag.Bookings));
+        var bookingId;
+        window.onclick = function (event) {
+            if (event.target == $('#DeleteConfirmModal')) {
+                $('#DeleteConfirmModal').css('display', 'none');
+            }
+        }
+        //Event Calendar Initiazile
+        const ec = new EventCalendar(document.getElementById('ec'), {
+            view: 'resourceTimeGridWeek',
+            headerToolbar:
+            {
+                start: 'prev,next today',
+                center: 'title',
+                end: 'resourceTimeGridWeek resourceTimeGridDay  listWeek resourceTimelineWeek'
+            },
+            buttonText: {
+                resourceTimeGridWeek: 'Weekly View',
+                resourceTimeGridDay: 'Day View',
+                listWeek: 'Dairy View',
+                today: 'Today',
+                resourceTimelineWeek: 'Resource Timeline View'
+            },
+            eventBackgroundColor: '#8B0000',
+            eventDurationEditable: false,
+            eventStartEditable: false,
+            selectable: true,
+            selectMinDistance: 10,
+            slotEventOverlap: false,
+            allDaySlot: false,
+            hiddenDays: [5],
+            resources: rooms,
+            events: bookings,
+            select: function (info) {
+                document.getElementById('startTime').value = info.startStr;
+                document.getElementById('endTime').value = info.endStr;
+                document.getElementById('selectedRoom').value = info.resource.id;
+                modal.show();
+                $('#createEventBySelect').show();
+                $('#createEventByDateClick').hide();
+                $('#updateEventButton').hide();
+                $('#deleteEventButton').hide();
+
+                console.log("Select", info);
+            },
+            eventClick: function (info) {
+                var currentUserId = "@User.FindFirstValue(ClaimTypes.NameIdentifier)";
+                var admin = @User.IsInRole("Admin").ToString().ToLower();
+
+                if (info.event.extendedProps.userId == currentUserId || admin) {
+                    modal.show();
+                };
+
+                document.getElementById('startTime').value = toIsoString(info.event.start);
+                document.getElementById('endTime').value = toIsoString(info.event.end);
+                document.getElementById('selectedRoom').value = info.event.resourceIds;
+                document.getElementById('eventTitle').value = info.event.title;
+                bookingId = info.event.id;
+
+                $('#createEventByDateClick').hide();
+                $('#createEventBySelect').hide();
+                $('#updateEventButton').show();
+                $('#deleteEventButton').show();
+
+                console.log("Event Click", info);
+            },
+            dateClick: function (info) {
+                modal.show();
+                document.getElementById('startTime').value = info.dateStr;
+                document.getElementById('selectedRoom').value = info.resource.id;
+
+                $('#createEventByDateClick').show();
+                $('#createEventBySelect').hide();
+                $('#updateEventButton').hide();
+                $('#deleteEventButton').hide();
+
+                console.log("dateclick", info);
+            }
+        });
+        //Calendar Initiaze End
+        //Event Listner For Booking Create
+        $('#createEventBySelect').click(function () {
+            let startStr = $('#startTime').val();
+            let endStr = $('#endTime').val();
+            let eventTitle = $('#eventTitle').val();
+            let room = $('#selectedRoom').val();
+
+            if (eventTitle == '' || room == '') {
+                toastr.error('All fields are required!', { timeOut: 3000, 'preventDuplicates': true });
+
+                return;
+            }
+
+            var newMeeting = {
+                start: startStr,
+                end: endStr,
+                resourceId: room,
+                title: eventTitle,
+            };
+
+            //Ajax Method for Booking Create
+            $.ajax({
+                type: "POST",
+                url: "Booking/Create",
+                data:
+                {
+                    resourceId: room, title: eventTitle, start: startStr, end: endStr
+                },
+                success: function (response) {
+                    if (response.isSuccess == true) {
+                        ec.addEvent(newMeeting)
+                        toastr.success(response.message, 'Success Alert', { timeOut: 3000, 'closeButton': true, 'preventDuplicates': true });
+                    }
+                    else {
+                        toastr.warning(response.message, 'Warning Alert', { timeOut: 3000, 'closeButton': true, 'preventDuplicates': true });
+                    }
+                },
+                error: function (xhr, status, error) {
+                    toastr.error(error, 'Something went wrong!', { timeOut: 3000 });
+                }
+            });
+            modal.hide();
+            $('#modal-form').trigger('reset');
+        });
+
+        //Event Listner For Create Booking (Using Select Date)
+        $('#createEventByDateClick').click(function () {
+            let startStr = $('#startTime').val();
+            let endStr = $('#endTime').val();
+            let eventTitle = $('#eventTitle').val();
+            let room = $('#selectedRoom').val();
+
+            if (eventTitle == '' || room == '') {
+                toastr.error('All fields are required!', { timeOut: 3000, 'preventDuplicates': true });
+
+                return;
+            }
+
+            var newMeeting = {
+                start: startStr,
+                end: endStr,
+                resourceId: room,
+                title: eventTitle
+            };
+
+            //Ajax Method for Booking Create (Using select Date)
+            $.ajax({
+                type: "POST",
+                url: "Booking/Create",
+                data:
+                {
+                    resourceId: room, title: eventTitle, start: startStr, end: endStr
+                },
+                success: function (response) {
+                    if (response.isSuccess == true) {
+                        ec.addEvent(newMeeting)
+                        toastr.success(response.message, 'Success Alert', { timeOut: 3000, 'closeButton': true, 'preventDuplicates': true });
+                    }
+                    else {
+                        toastr.warning(response.message, 'Warning Alert', { timeOut: 3000, 'closeButton': true, 'preventDuplicates': true });
+                    }
+                },
+                error: function (xhr, status, error) {
+                    toastr.error(error, 'Something went  wrong!', { timeOut: 3000 });
+                }
+            });
+            modal.hide();
+            $('#modal-form').trigger('reset');
+        });
+        //Event Listner For Update Booking
+        $('#updateEventButton').click(function () {
+            let startStr = $('#startTime').val();
+            let endStr = $('#endTime').val();
+            let eventTitle = $('#eventTitle').val();
+            let room = $('#selectedRoom').val();
+
+            if (eventTitle == '' || room == '') {
+                toastr.error('All fields are required!', { timeOut: 3000, 'preventDuplicates': true });
+
+                return;
+            }
+
+            var updateMeeting = {
+                start: startStr,
+                end: endStr,
+                resourceId: room,
+                title: eventTitle,
+                id: bookingId
+            };
+
+            //Ajax Method for Update Booking
+            $.ajax({
+                type: "POST",
+                url: `Booking/Edit?id= ${bookingId}`,
+                data:
+                {
+                    resourceId: room, title: eventTitle, start: startStr, end: endStr, id: bookingId
+                },
+                success: function (response) {
+                    if (response.isSuccess == true) {
+                        ec.updateEvent(updateMeeting)
+                        toastr.success(response.message, 'Success Alert', { timeOut: 3000, 'closeButton': true, 'preventDuplicates': true });
+                    }
+                    else {
+                        toastr.warning(response.message, 'Warning Alert', { timeOut: 3000, 'closeButton': true, 'preventDuplicates': true });
+                    }
+                },
+                error: function (xhr, status, error) {
+                    toastr.error(error, 'Something went  wrong!', { timeOut: 3000 });
+                }
+            });
+            modal.hide();
+            $('#modal-form').trigger('reset');
+        });
+
+        //Event Listner For Delete Meeting
+        $('#deleteEventButton').click(function () {
+            modal.hide();
+            $('#DeleteConfirmModal').css('display', 'block');
+            $('.overlay').css('display', 'block');
+
+        });
+        $('#DeleteConfirmBtn').click(function () {
+            $.ajax({
+                type: "POST",
+                url: `Booking/Delete?id= ${bookingId}`,
+                data:
+                {
+                    id: bookingId
+                },
+                success: function (response) {
+                    if (response.isSuccess == true) {
+                        ec.removeEventById(bookingId)
+                        toastr.success(response.message, 'Success Alert', { timeOut: 3000, 'closeButton': true, 'preventDuplicates': true });
+                    }
+                    else {
+                        toastr.warning(response.message, 'Warning Alert', { timeOut: 3000, 'closeButton': true, 'preventDuplicates': true });
+                    }
+                },
+                error: function (xhr, status, error) {
+                    toastr.error(error, 'Something went  wrong!', { timeOut: 3000 });
+                }
+            });
+            $('.overlay').hide();
+        });
+        //Converting JS dateTime to ISO dateTime format
+        function toIsoString(date) {
+            let year = date.getFullYear();
+            let month = date.getMonth() + 1;
+            let day = date.getDate();
+            let hour = date.getHours();
+            let minute = date.getMinutes();
+            let second = date.getSeconds();
+
+            return `${year}-${pad(month)}-${pad(day)}T${pad(hour)}:${pad(minute)}:${pad(second)}`;
+        }
+        function pad(item) {
+            return (item < 10 ? "0" : "") + item;
+        }
+    });
+</script>
+
+
+
+
+
+
+

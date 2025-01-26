@@ -1,0 +1,85 @@
+﻿@using DataAccessLayer.HelperClass
+@model PaginatedList<DataAccessLayer.Entities.Booking>
+
+@{
+    ViewData["Title"] = "MyBooking";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<h3 style="margin-left: 30rem; color:darkcyan">Booking History</h3>
+
+<div class="row" style="padding: 10px 0 10px 0">
+    <div class="col-md-6">
+        <form class="d-flex" asp-action="MyBooking">
+            <input name="searchString" class="form-control me-1" type="search" placeholder="Search" aria-label="Search">
+            <button class="btn btn-outline-success" type="submit">Search</button>
+        </form>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <table class="table table-hover table-responsive table-bordered">
+            <thead>
+                <tr>
+                    <th>
+                        Event Title
+                    </th>
+                    <th>
+                        <a class="text-dark" asp-action="MyBooking" asp-route-sortOrder=@ViewData["TimeSortOrder"]> Start Time </a>
+                    </th>
+                    <th>
+                        End Time
+                    </th>
+                    <th>
+                        Room
+                    </th>
+                    <th>
+                        Status
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.EventTitle)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.EventStart)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.EventEnd)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Rooms.Title)
+                        </td>
+                        @if (item.IsApproved == true)
+                        {
+                            <td>
+                                <p style="color: forestgreen">Accepted</p>
+                            </td>
+                        }
+                        else
+                        {
+                            <td>
+                                <p style="color:darkgoldenrod">Waiting For Approval</p>
+                            </td>
+                        }
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+@* Paging *@
+@{
+    var prevDisabled = Model.HasPreviousPage ? "" : "disabled";
+    var nextDisabled = Model.HasNextPage ? "" : "disabled";
+}
+
+<a asp-action="MyBooking" asp-route-pageIndex="@(Model.PageIndex - 1)" asp-route-currentFilter="@ViewData["CurrentFilter"]" class="btn btn-default @prevDisabled">
+    Previous
+</a>
+<a asp-action="MyBooking" asp-route-pageIndex="@(Model.PageIndex + 1)" asp-route-currentFilter="@ViewData["CurrentFilter"]" class="btn btn-default @nextDisabled">
+    Next
+</a>

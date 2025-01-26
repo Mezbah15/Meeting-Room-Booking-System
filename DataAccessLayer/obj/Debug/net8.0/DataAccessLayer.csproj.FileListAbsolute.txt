@@ -1,0 +1,30 @@
+D:\ASP.NET Practice\meeting-room-booking\DataAccessLayer\bin\Debug\net8.0\DataAccessLayer.deps.json
+D:\ASP.NET Practice\meeting-room-booking\DataAccessLayer\bin\Debug\net8.0\DataAccessLayer.dll
+D:\ASP.NET Practice\meeting-room-booking\DataAccessLayer\bin\Debug\net8.0\DataAccessLayer.pdb
+D:\ASP.NET Practice\meeting-room-booking\DataAccessLayer\bin\Debug\net8.0\BusinessLogicLayer.dll
+D:\ASP.NET Practice\meeting-room-booking\DataAccessLayer\bin\Debug\net8.0\BusinessLogicLayer.pdb
+D:\ASP.NET Practice\meeting-room-booking\DataAccessLayer\obj\Debug\net8.0\DataAccessLayer.csproj.AssemblyReference.cache
+D:\ASP.NET Practice\meeting-room-booking\DataAccessLayer\obj\Debug\net8.0\DataAccessLayer.GeneratedMSBuildEditorConfig.editorconfig
+D:\ASP.NET Practice\meeting-room-booking\DataAccessLayer\obj\Debug\net8.0\DataAccessLayer.AssemblyInfoInputs.cache
+D:\ASP.NET Practice\meeting-room-booking\DataAccessLayer\obj\Debug\net8.0\DataAccessLayer.AssemblyInfo.cs
+D:\ASP.NET Practice\meeting-room-booking\DataAccessLayer\obj\Debug\net8.0\DataAccessLayer.csproj.CoreCompileInputs.cache
+D:\ASP.NET Practice\meeting-room-booking\DataAccessLayer\obj\Debug\net8.0\DataAccessLayer.sourcelink.json
+D:\ASP.NET Practice\meeting-room-booking\DataAccessLayer\obj\Debug\net8.0\DataAcce.E67BD773.Up2Date
+D:\ASP.NET Practice\meeting-room-booking\DataAccessLayer\obj\Debug\net8.0\DataAccessLayer.dll
+D:\ASP.NET Practice\meeting-room-booking\DataAccessLayer\obj\Debug\net8.0\refint\DataAccessLayer.dll
+D:\ASP.NET Practice\meeting-room-booking\DataAccessLayer\obj\Debug\net8.0\DataAccessLayer.pdb
+D:\ASP.NET Practice\meeting-room-booking\DataAccessLayer\obj\Debug\net8.0\ref\DataAccessLayer.dll
+D:\Projects\mrb-mezba\DataAccessLayer\bin\Debug\net8.0\DataAccessLayer.deps.json
+D:\Projects\mrb-mezba\DataAccessLayer\bin\Debug\net8.0\DataAccessLayer.runtimeconfig.json
+D:\Projects\mrb-mezba\DataAccessLayer\bin\Debug\net8.0\DataAccessLayer.dll
+D:\Projects\mrb-mezba\DataAccessLayer\bin\Debug\net8.0\DataAccessLayer.pdb
+D:\Projects\mrb-mezba\DataAccessLayer\obj\Debug\net8.0\DataAccessLayer.csproj.AssemblyReference.cache
+D:\Projects\mrb-mezba\DataAccessLayer\obj\Debug\net8.0\DataAccessLayer.GeneratedMSBuildEditorConfig.editorconfig
+D:\Projects\mrb-mezba\DataAccessLayer\obj\Debug\net8.0\DataAccessLayer.AssemblyInfoInputs.cache
+D:\Projects\mrb-mezba\DataAccessLayer\obj\Debug\net8.0\DataAccessLayer.AssemblyInfo.cs
+D:\Projects\mrb-mezba\DataAccessLayer\obj\Debug\net8.0\DataAccessLayer.csproj.CoreCompileInputs.cache
+D:\Projects\mrb-mezba\DataAccessLayer\obj\Debug\net8.0\DataAccessLayer.dll
+D:\Projects\mrb-mezba\DataAccessLayer\obj\Debug\net8.0\refint\DataAccessLayer.dll
+D:\Projects\mrb-mezba\DataAccessLayer\obj\Debug\net8.0\DataAccessLayer.pdb
+D:\Projects\mrb-mezba\DataAccessLayer\obj\Debug\net8.0\DataAccessLayer.genruntimeconfig.cache
+D:\Projects\mrb-mezba\DataAccessLayer\obj\Debug\net8.0\ref\DataAccessLayer.dll

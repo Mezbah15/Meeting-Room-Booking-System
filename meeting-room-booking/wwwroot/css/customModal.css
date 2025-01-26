@@ -1,0 +1,33 @@
+﻿.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(128,128,128,0.5);
+    display: none;
+    z-index: 1;
+}
+.custom-container {
+    padding: 16px;
+    text-align: center;
+}
+
+#DeleteConfirmModal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 40%;
+    top: 10%;
+    width: 25%;
+    height: 40%;
+    background-color: #474e5d;
+    padding-top: 50px;
+}
+
+.custom-modal-content {
+    background-color: #fefefe;
+    margin: 5% auto 15% auto; 
+    border: 1px solid #888;
+    width: 80%; 
+}

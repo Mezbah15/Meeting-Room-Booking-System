@@ -1,0 +1,15 @@
+D:\Projects\mrb-mezba\ServiceLayer\bin\Debug\net8.0\ServiceLayer.deps.json
+D:\Projects\mrb-mezba\ServiceLayer\bin\Debug\net8.0\ServiceLayer.dll
+D:\Projects\mrb-mezba\ServiceLayer\bin\Debug\net8.0\ServiceLayer.pdb
+D:\Projects\mrb-mezba\ServiceLayer\bin\Debug\net8.0\DataAccessLayer.dll
+D:\Projects\mrb-mezba\ServiceLayer\bin\Debug\net8.0\DataAccessLayer.pdb
+D:\Projects\mrb-mezba\ServiceLayer\obj\Debug\net8.0\ServiceLayer.csproj.AssemblyReference.cache
+D:\Projects\mrb-mezba\ServiceLayer\obj\Debug\net8.0\ServiceLayer.GeneratedMSBuildEditorConfig.editorconfig
+D:\Projects\mrb-mezba\ServiceLayer\obj\Debug\net8.0\ServiceLayer.AssemblyInfoInputs.cache
+D:\Projects\mrb-mezba\ServiceLayer\obj\Debug\net8.0\ServiceLayer.AssemblyInfo.cs
+D:\Projects\mrb-mezba\ServiceLayer\obj\Debug\net8.0\ServiceLayer.csproj.CoreCompileInputs.cache
+D:\Projects\mrb-mezba\ServiceLayer\obj\Debug\net8.0\ServiceL.3037F684.Up2Date
+D:\Projects\mrb-mezba\ServiceLayer\obj\Debug\net8.0\ServiceLayer.dll
+D:\Projects\mrb-mezba\ServiceLayer\obj\Debug\net8.0\refint\ServiceLayer.dll
+D:\Projects\mrb-mezba\ServiceLayer\obj\Debug\net8.0\ServiceLayer.pdb
+D:\Projects\mrb-mezba\ServiceLayer\obj\Debug\net8.0\ref\ServiceLayer.dll

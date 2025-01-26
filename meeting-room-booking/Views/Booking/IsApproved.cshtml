@@ -1,0 +1,81 @@
+﻿@using DataAccessLayer.HelperClass
+@model PaginatedList<DataAccessLayer.Entities.Booking>
+
+@{
+    ViewData["Title"] = "IsApproved";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<head>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+</head>
+
+<a asp-action="ScheduledBooking" class="btn btn-outline-primary">Scheduled Bookings</a>
+<h3 style="margin-left: 30rem; color:darkcyan">Waiting for Approval</h3>
+
+<div class="row" style="padding: 10px 0 10px 0">
+    <div class="col-md-6">
+        <form class="d-flex" asp-action="IsApproved">
+            <input name="searchString" class="form-control me-1" type="search" placeholder="Search" aria-label="Search">
+            <button class="btn btn-outline-success" type="submit">Search</button>
+        </form>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <table class="table table-hover table-responsive table-bordered">
+            <thead>
+                <tr>
+                    <th>
+                        Event Title
+                    </th>
+                    <th>
+                       Room Name
+                    </th>
+                    <th> 
+                        <a class="text-dark" asp-action="IsApproved" asp-route-sortOrder=@ViewData["TimeSortOrder"]>Start Time</a>   
+                    </th>
+                    <th>
+                        End Time
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+            @foreach (var item in Model)
+            {
+            <tr>
+                <td>
+                        @Html.DisplayFor(modelItem => item.EventTitle)
+                </td>
+                <td>
+                        @Html.DisplayFor(modelItem => item.Rooms.Title)
+                </td>
+                <td>
+                        @Html.DisplayFor(modelItem => item.EventStart)
+                </td>
+                <td>
+                        @Html.DisplayFor(modelItem => item.EventEnd)
+                </td>
+                <td>
+                    <a href="/booking/accept?id=@item.Id" type="button" class="btn btn-primary">Accept</a>
+                    <a href="/booking/UpdateByAdmin?id=@item.Id" type="button" class="btn btn-info">Edit</a>
+                    <a href="/booking/reject?id=@item.Id" type="button" class="btn btn-danger">Reject</a>
+                </td>
+            </tr>
+            }
+            </tbody>
+     </table>
+    </div>
+</div>
+
+@* Paging *@
+@{
+    var prevDisabled = Model.HasPreviousPage ? "" : "disabled";
+    var nextDisabled = Model.HasNextPage ? "" : "disabled";
+}
+
+<a asp-action="IsApproved" asp-route-pageIndex="@(Model.PageIndex - 1)" asp-route-currentFilter="@ViewData["CurrentFilter"]" class="btn btn-default @prevDisabled">
+    Previous
+</a>
+<a asp-action="IsApproved" asp-route-pageIndex="@(Model.PageIndex + 1)" asp-route-currentFilter="@ViewData["CurrentFilter"]" class="btn btn-default @nextDisabled">
+    Next
+</a>

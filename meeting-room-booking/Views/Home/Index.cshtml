@@ -1,0 +1,36 @@
+﻿@using System.Security.Claims
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
+    <div class="carousel-indicators">
+        <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+        <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
+        <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
+    </div>
+    <div class="carousel-inner">
+        <div class="carousel-item active">
+            <img src="/Images/room1.jpg" class="item-img" alt="...">
+        </div>
+        <div class="carousel-item">
+            <img src="/Images/room2.jpg" class="item-img" alt="...">
+        </div>
+        <div class="carousel-item">
+            <img src="/Images/room3.jpeg" class="item-img" alt="...">
+        </div>
+    </div>
+</div>
+@if (@User.FindFirstValue(ClaimTypes.NameIdentifier) == null)
+{
+    <div class="d-flex justify-content-center" style="margin-top:3rem">
+        <a href="https://localhost:7167/Identity/Account/Login" class="btn btn-outline-info">Sign in For Booking!</a>
+    </div>
+}
+else
+{
+    <div class="d-flex justify-content-center" style="margin-top:3rem">
+        <a href="https://localhost:7167/Booking/Index" class="btn btn-outline-info">Book a Meeting Today!</a>
+    </div>
+}
